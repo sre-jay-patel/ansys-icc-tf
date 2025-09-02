@@ -47,3 +47,27 @@ resource "aws_route_table_association" "public" {
   subnet_id = each.value.id
   route_table_id = aws_route_table.public.id
 }
+
+resource "aws_subnet" "private" {
+  for_each = { for idx, az in local.zone_names : idx => {
+    az = az
+    cidr = var.private_subnet_cidrs[idx]
+  } }
+  vpc_id = aws_vpc.main.id
+  cidr_block = each.value.cidr
+  availability_zone = each.value.az
+  tags = merge(var.tags, { Name = "iac-private-${each.key}" })
+}
+
+resource "aws_route_table" "private" {
+  for_each = aws_subnet.private
+  vpc_id = aws_vpc.main.id
+  tags = merge(var.tags, { Name = "iac-private-rt-${each.key}" })
+}
+
+
+resource "aws_route_table_association" "private" {
+  for_each = aws_subnet.private
+  subnet_id = each.value.id
+  route_table_id = aws_route_table.private[each.key].id
+}
