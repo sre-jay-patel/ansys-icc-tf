@@ -30,3 +30,20 @@ variable "private_subnet_cidrs" {
   type        = list(string)
   description = "A list of CIDR blocks for the private subnets"
 }
+
+variable "instance_type" {
+  type        = string
+  description = "values of instance type to use"
+}
+
+variable "key_name" {
+  type        = string
+  default     = null
+  description = "The name of the key pair to use for SSH access"
+}
+
+variable "ami_id" {
+  type        = string
+  default     = null
+  description = "The AMI ID to use for the instance. If not provided, the latest Amazon Linux 2023 AMI will be used"
+}

@@ -15,3 +15,5 @@ private_subnet_cidrs = [
   "10.0.144.0/20",
   "10.0.160.0/20"
 ]
+instance_type = "t2.micro"
+key_name      = "public-ssh-key"
